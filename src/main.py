@@ -31,6 +31,6 @@ async def create_subscription(subscription: Subscription):
         "body": "Please confirm your email"
     }
     send_notification(subscription, data=sample_data)
-    remind_subscriber.schedule(args=(subscription,), delay=30)
+    remind_subscriber.schedule(args=(subscription, ), delay=30)
 
     return {}
