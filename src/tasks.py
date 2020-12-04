@@ -1,9 +1,12 @@
+import os
+
 import pendulum
-from huey import SqliteHuey
+from huey import RedisHuey, SqliteHuey
 
 from .push import send_notification
 
-huey = SqliteHuey(filename='huey.db')
+redis_url = os.environ.get('REDIS_URL')
+huey = RedisHuey(url=redis_url) if redis_url else SqliteHuey()
 
 
 @huey.task()
