@@ -1,0 +1,135 @@
+<html lang="en">
+  <head>
+    <title>Browser push notifications</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <main class="main-container">
+      <div>
+        <div class="bg-white rounded-lg mt-8 mx-auto max-w-screen-xl px-4 mb-16 sm:mt-12 sm:px-6 md:mt-20 lg:mb-24 xl:mt-24">
+        <div class="lg:grid lg:grid-cols-12 lg:gap-8">
+            <div class="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
+            <h1 class="mt-1 text-4xl tracking-tight leading-10 font-extrabold text-gray-900 sm:leading-none sm:text-6xl lg:text-5xl">
+                A marvelous Open Source Status Page system
+            </h1>
+            <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+                <div class="rounded-md shadow">
+                <button type="button" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-blue-600 hover:text-white hover:bg-blue-500 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out md:py-4 md:text-lg md:px-10 subscribe">
+                    Subscribe
+                </button>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+        <div id="sponsoring" class="bg-blue-900">
+        <div class="pt-12 sm:pt-16 lg:pt-24">
+            <div class="max-w-screen-xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto lg:max-w-none">
+                <h2 class="mt-2 text-3xl leading-9 font-extrabold text-white sm:text-4xl sm:leading-10 lg:text-5xl lg:leading-none">
+                Sponsoring
+                </h2>
+            </div>
+            </div>
+        </div>
+        <div class="mt-8 pb-12 bg-gray-50 sm:mt-12 sm:pb-16 lg:mt-16 lg:pb-24">
+            <div class="relative">
+            <div class="absolute inset-0 h-3/4 bg-blue-900"></div>
+            <div class="relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-md mx-auto lg:max-w-5xl lg:grid lg:grid-cols-3 lg:gap-5">
+                <div class="flex flex-col rounded-lg shadow-lg overflow-hidden">
+                    <div class="flex-1 bg-white p-6 flex flex-col justify-between">
+                    <div class="flex-1">
+                        <div class="block">
+                        <h3 class="mt-4 flex items-baseline text-4xl leading-none font-extrabold">
+                            Backers
+                        </h3>
+                        <p class="mt-5 text-lg leading-7 text-gray-500">
+                            Support me with a monthly donation and help me continue my activities. You can buy me from a coffee to a very good hamburger.
+                        </p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="flex flex-col rounded-lg shadow-lg overflow-hidden mt-4 lg:mt-0">
+                    <div class="flex-1 bg-white p-6 flex flex-col justify-between">
+                    <div class="flex-1">
+                        <div class="block">
+                        <h3 class="mt-4 flex items-baseline text-4xl leading-none font-extrabold">
+                            Sponsors
+                        </h3>
+                        <p class="mt-5 text-lg leading-7 text-gray-500">
+                            Become a sponsor and get your logo on the <strong>README on Github</strong> with a link to your site.
+                        </p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="flex flex-col rounded-lg shadow-lg overflow-hidden mt-4 lg:mt-0">
+                    <div class="flex-1 bg-white p-6 flex flex-col justify-between">
+                    <div class="flex-1">
+                        <div class="block">
+                        <h3 class="mt-4 flex items-baseline text-4xl leading-none font-extrabold">
+                            Partners
+                        </h3>
+                        <p class="mt-5 text-lg leading-7 text-gray-500">
+                            Become a Partner and get your logo with a link to your site on the README on Github, every page of the Statusfy Blog Posts and Documentation Articles.
+                        </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      function urlBase64ToUint8Array(base64String) {
+        var padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+        var base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+
+        var rawData = window.atob(base64);
+        var outputArray = new Uint8Array(rawData.length);
+
+        for (var i = 0; i < rawData.length; ++i) {
+          outputArray[i] = rawData.charCodeAt(i);
+        }
+        return outputArray;
+      }
+
+      async function registerForPush(pushManager) {
+        try {
+          const subscription = await pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(
+              'BEkSy2AUnE_kCQ2CB2ThrHVu7UuMkTqHjLUIa2qUAoyBIEEezM2edH8uhGtVbXD-46hjQ5HLxc8cfmuBzvChNf4',
+            ),
+          });
+
+          await fetch('/push/subscription', {
+            method: 'POST',
+            body: JSON.stringify(subscription.toJSON()),
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js');
+        navigator.serviceWorker.ready.then((registration) => {
+          if ('PushManager' in window)
+            document
+              .querySelector('button.subscribe')
+              .addEventListener('click', () => registerForPush(registration.pushManager));
+        });
+      }
+    </script>
+  </body>
+</html>
