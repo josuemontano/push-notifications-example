@@ -11,6 +11,8 @@ uvicorn = "^0.12.3"
 aiofiles = "^0.6.0"
 Jinja2 = "^2.11.2"
 pywebpush = "^1.11.0"
+pendulum = "^2.1.2"
+huey = "^2.3.0"
 
 [tool.poetry.dev-dependencies]
 ipdb = "^0.13.4"

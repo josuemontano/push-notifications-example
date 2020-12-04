@@ -5,10 +5,10 @@ from fastapi.templating import Jinja2Templates
 
 from .models import SUBSCRIPTIONS, Subscription
 from .push import send_notification
+from .tasks import remind_subscriber
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="src/static"), name="static")
-
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -31,5 +31,6 @@ async def create_subscription(subscription: Subscription):
         "body": "Please confirm your email"
     }
     send_notification(subscription, data=sample_data)
+    remind_subscriber.schedule(args=(subscription,), delay=30)
 
     return {}
