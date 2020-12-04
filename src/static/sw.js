@@ -13,21 +13,28 @@ self.addEventListener("push", function (event) {
 
   var options = {
     body: data.body,
-    icon: "images/example.png",
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
       primaryKey: "2",
     },
     actions: [
-      {
-        action: "explore",
-        title: "Explore this new world",
-        icon: "images/checkmark.png",
-      },
-      { action: "close", title: "Close", icon: "images/xmark.png" },
+      { action: "explore", title: "Explore this new world" },
+      { action: "close", title: "Close" },
     ],
   };
 
-  e.waitUntil(self.registration.showNotification(data.title, options));
+  event.waitUntil(self.registration.showNotification(data.title, options));
 });
+
+self.addEventListener(
+  "notificationclick",
+  function (event) {
+    if (event.action === "close") {
+      event.notification.close();
+    } else if (event.action === "explore") {
+      clients.openWindow("https://magicbell.io");
+    }
+  },
+  false
+);
