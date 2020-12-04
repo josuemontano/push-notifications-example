@@ -20,3 +20,11 @@ async def home_page(request: Request):
 @app.get("/sw.js")
 async def service_worker():
     return FileResponse('src/static/sw.js')
+
+
+@app.post("/push/subscription")
+async def create_subscription(subscription: Subscription):
+    SUBSCRIPTIONS.append(subscription)
+    send_notification(subscription, data="Welcome to magicbell.io")
+
+    return {}
