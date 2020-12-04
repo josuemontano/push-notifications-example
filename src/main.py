@@ -15,3 +15,8 @@ app.mount("/static", StaticFiles(directory="src/static"), name="static")
 async def home_page(request: Request):
     templates = Jinja2Templates(directory="src/templates")
     return templates.TemplateResponse("home.jinja2", {"request": request})
+
+
+@app.get("/sw.js")
+async def service_worker():
+    return FileResponse('src/static/sw.js')
