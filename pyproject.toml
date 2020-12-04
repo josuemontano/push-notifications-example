@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "push-notifications-example"
+version = "0.1.0"
+description = ""
+authors = ["Josue Montano <josuemontanoa@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fastapi = "^0.62.0"
+uvicorn = "^0.12.3"
+aiofiles = "^0.6.0"
+Jinja2 = "^2.11.2"
+pywebpush = "^1.11.0"
+
+[tool.poetry.dev-dependencies]
+ipdb = "^0.13.4"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
