@@ -3,7 +3,7 @@ from huey import SqliteHuey
 
 from .push import send_notification
 
-huey = SqliteHuey(filename='/tmp/demo.db')
+huey = SqliteHuey(filename='huey.db')
 
 
 @huey.task()
