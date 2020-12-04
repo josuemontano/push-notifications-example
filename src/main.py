@@ -25,6 +25,11 @@ async def service_worker():
 @app.post("/push/subscription")
 async def create_subscription(subscription: Subscription):
     SUBSCRIPTIONS.append(subscription)
-    send_notification(subscription, data="Welcome to magicbell.io")
+
+    sample_data = {
+        "title": "Welcome to magicbell.io",
+        "body": "Please confirm your email"
+    }
+    send_notification(subscription, data=sample_data)
 
     return {}
