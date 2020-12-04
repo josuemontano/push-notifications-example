@@ -8,10 +8,11 @@ self.addEventListener("activate", (event) => {
   console.warn("activated!", event);
 });
 
-self.addEventListener("push", function (e) {
-  console.warn("push", e);
+self.addEventListener("push", function (event) {
+  var data = event.data.json();
+
   var options = {
-    body: "This notification was generated from a push!",
+    body: data.body,
     icon: "images/example.png",
     vibrate: [100, 50, 100],
     data: {
@@ -27,5 +28,6 @@ self.addEventListener("push", function (e) {
       { action: "close", title: "Close", icon: "images/xmark.png" },
     ],
   };
-  e.waitUntil(self.registration.showNotification("Hello world!", options));
+
+  e.waitUntil(self.registration.showNotification(data.title, options));
 });
